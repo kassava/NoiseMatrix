@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+ 	xmlns:android="http://schemas.android.com/apk/res/android">
+	<EditTextPreference
+ 		android:key="cross_ev"
+ 		android:summary="180"
+ 		android:title="Cross expected value">
+	</EditTextPreference>
+	<EditTextPreference
+ 		android:key="cross_sd"
+ 		android:summary="30"
+ 		android:title="Cross standard deviation">
+	</EditTextPreference>
+	<EditTextPreference
+ 		android:key="background_ev"
+ 		android:summary="90"
+ 		android:title="Background expected value">
+	</EditTextPreference>
+	<EditTextPreference
+ 		android:key="background_sd"
+ 		android:summary="30"
+ 		android:title="Background standard deviation">
+	</EditTextPreference>
+	<EditTextPreference
+ 		android:key="fields_ev"
+ 		android:summary="180"
+ 		android:title="Fields expected value">
+	</EditTextPreference>
+	<EditTextPreference
+ 		android:key="fields_sd"
+ 		android:summary="30"
+ 		android:title="Fields standard deviation">
+	</EditTextPreference>
+	<EditTextPreference
+ 		android:key="circles_count"
+ 		android:summary="5"
+ 		android:title="Count of the displayed circles">
+	</EditTextPreference>
+</PreferenceScreen>

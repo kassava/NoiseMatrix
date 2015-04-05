@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">NoiseMatrix</string>
+    <string name="action_settings">Settings</string>
+    <string name="button">Кнопка всевластия</string>
+    <string name="text">Администрация не несёт ответственности за активацию режима всевластия</string>
+    <string name="drawer_open">Open navigation drawer</string>
+	<string name="drawer_close">Close navigation drawer</string>
+	<string name="screen_one">Screen one</string>
+	<string name="screen_two">Screen two</string>
+	<string name="screen_three">Screen three</string>
+	<string name="internal_storage">Internal storage</string>
+	<string name="save">Save</string>
+	<string name="page">Page</string>
+	<string name="stat1">Здесь должна быть статистика</string>
+	<string name="stat2">0.0</string>
+	<string name="four_circles">4 circles</string>
+	<string name="six_circles">6 circles</string>
+
+    <string-array name="screen_array">
+        <item>Noise Matrix</item>
+        <item>Mirer</item>
+        <item>Circle Mirer</item>
+        <item>Big Mirer</item>
+        <item>Stats</item>
+    </string-array>
+</resources>
