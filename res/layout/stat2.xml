@@ -20,17 +20,23 @@
         android:layout_weight="1" >
 
         <RadioButton
-            android:id="@+id/radio2"
+            android:id="@+id/radio3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
             android:text="@string/four_circles" />
 
         <RadioButton
-            android:id="@+id/radio3"
+            android:id="@+id/radio4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/six_circles" />
+        
+        <RadioButton
+            android:id="@+id/radio5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ten_circles" />
     </RadioGroup>
 
     <ImageView

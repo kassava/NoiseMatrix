@@ -41,12 +41,13 @@ public class Stats extends Fragment {
     private ImageView mirer2;
     private TextView textView;
     private TableLayout tableLayout;
+    private RadioGroup radioGroup1;
     private RadioGroup radioGroup2;
     private final static String LOG_TAG = "stats";
     private Context mContext;
     private String mMirorFileName;
     private final int dimension = 256;
-    private int stat = 0; // 1 - r4, 2 - r6, 3 - l4, 4 - l6
+    private int stat = 0; // 1 - r4, 2 - r10, 3 - l4, 4 - l6, 5 - l5
     private int radio = 0;
 
     public Stats(Context context) {
@@ -142,6 +143,9 @@ public class Stats extends Fragment {
 		    case 4:
 		    	mirer2.setImageBitmap(mirerBitmap);
 		    	break;
+		    case 5:
+		    	mirer2.setImageBitmap(mirerBitmap);
+		    	break;
 		    default:
 		    	Log.d(LOG_TAG, "openImageMirerFile default case");
 		    	break;
@@ -171,11 +175,11 @@ public class Stats extends Fragment {
 		switch (stat) {
 		case 1:
 			Log.d(LOG_TAG, "1 stat = " + stat);
-			radiometricResolutionForCircles(byteArray);
+			radiometricResolutionFor6Circles(byteArray);
 			break;
 		case 2:
 			Log.d(LOG_TAG, "2 stat = " + stat);
-			radiometricResolutionForCircles(byteArray);
+			radiometricResolutionFor10Circles(byteArray);
 			break;
 		case 3:
 			Log.d(LOG_TAG, "3 stat = " + stat);
@@ -184,6 +188,10 @@ public class Stats extends Fragment {
 		case 4:
 			Log.d(LOG_TAG, "4 stat = " + stat);
 			linearResolutionFor6Circles(byteArray);
+			break;
+		case 5:
+			Log.d(LOG_TAG, "5 stat = " + stat);
+//			linearResolutionFor10Circles(byteArray);
 			break;
 		default:
 			Log.d(LOG_TAG, "Switch stat default case.");
@@ -209,39 +217,41 @@ public class Stats extends Fragment {
 	        e.printStackTrace();
 	    }
 	    
-	    byte[] bytes = new byte[(int) (fileSize * 4)];
-	    int i = 0;
-    	for (int index = 0; index < fileSize; index++) {	
-    			bytes[i] = (byte) mirerBytes[index]; //(byte) 255;
-    			bytes[i + 1] = (byte) mirerBytes[index];
-    			bytes[i + 2] = (byte) mirerBytes[index];
-    			bytes[i + 3] = 0; //(byte) mirerBytes[row][column];
-    			i += 4;
-    	}
-    		
-    	ByteBuffer buffer = ByteBuffer.allocate(bytes.length);
-		buffer.put(bytes);
-		buffer.rewind();
-		Bitmap bitmap = Bitmap.createBitmap((int)Math.abs(Math.sqrt(mirerFile.length())), 
-				(int)Math.abs(Math.sqrt(mirerFile.length())), Bitmap.Config.ARGB_8888);
-		bitmap.copyPixelsFromBuffer(buffer);
-		switch (stat) {
-	    case 1:
-	    	mirer1.setImageBitmap(bitmap);
-	    	break;
-	    case 2:
-	    	mirer1.setImageBitmap(bitmap);
-	    	break;
-	    case 3:
-	    	mirer2.setImageBitmap(bitmap);
-	    	break;
-	    case 4:
-	    	mirer2.setImageBitmap(bitmap);
-	    	break;
-	    default:
-	    	Log.d(LOG_TAG, "openImageMirerFile default case");
-	    	break;
-	    }			
+//	    byte[] bytes = new byte[(int) (fileSize * 4)];
+//	    int i = 0;
+//    	for (int index = 0; index < fileSize; index++) {	
+//    			bytes[i] = (byte) mirerBytes[index]; //(byte) 255;
+//    			bytes[i + 1] = (byte) mirerBytes[index];
+//    			bytes[i + 2] = (byte) mirerBytes[index];
+//    			bytes[i + 3] = 0; //(byte) mirerBytes[row][column];
+//    			i += 4;
+//    	}
+//    		
+//    	ByteBuffer buffer = ByteBuffer.allocate(bytes.length);
+//		buffer.put(bytes);
+//		buffer.rewind();
+//		Bitmap bitmap = Bitmap.createBitmap((int)Math.abs(Math.sqrt(mirerFile.length())), 
+//				(int)Math.abs(Math.sqrt(mirerFile.length())), Bitmap.Config.ARGB_8888);
+//		bitmap.copyPixelsFromBuffer(buffer);
+//		switch (stat) {
+//	    case 1:
+//	    	mirer1.setImageBitmap(bitmap);
+//	    	break;
+//	    case 2:
+//	    	mirer1.setImageBitmap(bitmap);
+//	    	break;
+//	    case 3:
+//	    	mirer2.setImageBitmap(bitmap);
+//	    	break;
+//	    case 4:
+//	    	mirer2.setImageBitmap(bitmap);
+//	    	break;
+//	    case 5:
+//	    	mirer2.setImageBitmap(bitmap);
+//	    default:
+//	    	Log.d(LOG_TAG, "openImageMirerFile default case");
+//	    	break;
+//	    }			
     	
     	int dimension = (int) Math.sqrt(fileSize);
     	int[][] statData = new int[dimension][dimension];
@@ -256,11 +266,11 @@ public class Stats extends Fragment {
     	switch (stat) {
 		case 1:
 			Log.d(LOG_TAG, "raw 1 stat = " + stat);
-			radiometricResolutionForCircles(statData);
+			radiometricResolutionFor6Circles(statData);
 			break;
 		case 2:
 			Log.d(LOG_TAG, "raw 2 stat = " + stat);
-			radiometricResolutionForCircles(statData);
+			radiometricResolutionFor10Circles(statData);
 			break;
 		case 3:
 			Log.d(LOG_TAG, "raw 3 stat = " + stat);
@@ -270,14 +280,24 @@ public class Stats extends Fragment {
 			Log.d(LOG_TAG, "raw 4 stat = " + stat);
 			linearResolutionFor6Circles(statData);
 			break;
+		case 5:
+			Log.d(LOG_TAG, "raw 5 stat = " + stat);
+//			linearResolutionFor10Circles(statData);
+			break;
 		default:
 			Log.d(LOG_TAG, "Switch stat default case.");
 			break;
 		}
 	}
 	
-	private void radiometricResolutionForCircles(int[][] byteArray) {		
-		double radiometricResolution = RadiometricResolution.radiometricResolutionForCircles(
+	private void radiometricResolutionFor6Circles(int[][] byteArray) {		
+		double radiometricResolution = RadiometricResolution.radiometricResolutionFor6Circles(
+				byteArray);
+		textView.setText(String.format("%1$,1.3f", radiometricResolution));
+	}
+	
+	private void radiometricResolutionFor10Circles(int[][] byteArray) {		
+		double radiometricResolution = RadiometricResolution.radiometricResolutionFor10Circles(
 				byteArray);
 		textView.setText(String.format("%1$,1.3f", radiometricResolution));
 	}
@@ -494,6 +514,10 @@ public class Stats extends Fragment {
 			mirer1 = (ImageView) view.findViewById(R.id.imageView1);
 			textView = (TextView) view.findViewById(R.id.textView1);
 			mirer1.setOnClickListener(this);
+			radioGroup1 = (RadioGroup) view.findViewById(R.id.radioGroup1);
+        	radioGroup1.setOnCheckedChangeListener(this);
+//        	radioGroup2.check(R.id.radio2);
+        	radioGroup1.clearCheck();
 		}
         
         private void stat2(View view) {
@@ -511,19 +535,37 @@ public class Stats extends Fragment {
 			switch (v.getId()) {
 			case R.id.imageView1:
 				Log.d(LOG_TAG, "imageView1");
-	        	stat = 1;
+				
+//	        	stat = 0;
+//	        	switch (radio) {
+//	        	case 1:
+//	        		stat = 1;
+//	        		break;
+//	        	case 2:
+//	        		stat = 2;
+//	        		break;
+//	        	default:
+//	        		break;
+//	        	}
+			
 	        	Log.d(LOG_TAG, "imageView1 stat = " + stat);
 				openImage();
 				break;
 			case R.id.imageView2:
 				Log.d(LOG_TAG, "imageView2");
-				stat = 0;
-				if (radio == 4) {
-					stat = 3;
-				}
-	        	if (radio == 6) { 
-	        		stat = 4;
-	        	}
+//				stat = 0;
+
+//				switch (radio) {
+//	        	case 3:
+//	        		stat = 3;
+//	        		break;
+//	        	case 2:
+//	        		stat = 2;
+//	        		break;
+//	        	default:
+//	        		break;
+//	        	}
+	        	
 	        	Log.d(LOG_TAG, "imageView2 stat = " + stat);
 				openImage();
 				break;
@@ -536,16 +578,28 @@ public class Stats extends Fragment {
 		@Override
 		public void onCheckedChanged(RadioGroup group, int checkedId) {
 			switch (checkedId) {
+			case R.id.radio1:
+				Log.d(LOG_TAG, "radio1");
+				stat = 1;
+				break;
 			case R.id.radio2:
 				Log.d(LOG_TAG, "radio2");
-				radio = 4;
+				stat = 2;
 				break;
 			case R.id.radio3:
 				Log.d(LOG_TAG, "radio3");
-				radio = 6;
+				stat = 3;
+				break;
+			case R.id.radio4:
+				Log.d(LOG_TAG, "radio4");
+				stat = 4;
+				break;
+			case R.id.radio5:
+				Log.d(LOG_TAG, "radio5");
+				stat = 5;
 				break;
 			default:
-				radio = 0;
+				stat = 0;
 				Log.d(LOG_TAG, "onChangeCheck default case");
 				break;
 			}

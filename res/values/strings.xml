@@ -17,6 +17,7 @@
 	<string name="stat2">0.0</string>
 	<string name="four_circles">4 circles</string>
 	<string name="six_circles">6 circles</string>
+	<string name="ten_circles">10 circles</string>
 
     <string-array name="screen_array">
         <item>Noise Matrix</item>

@@ -368,7 +368,7 @@ int id action_menu_presenter 0x7f0a0006
 int id action_mode_bar 0x7f0a002e
 int id action_mode_bar_stub 0x7f0a002d
 int id action_mode_close_button 0x7f0a0020
-int id action_settings 0x7f0a0054
+int id action_settings 0x7f0a0058
 int id activity_chooser_view_content 0x7f0a0021
 int id always 0x7f0a0014
 int id beginning 0x7f0a001b
@@ -409,9 +409,13 @@ int id pager 0x7f0a004a
 int id progress_circular 0x7f0a0007
 int id progress_horizontal 0x7f0a0008
 int id radio 0x7f0a002b
-int id radio2 0x7f0a0051
-int id radio3 0x7f0a0052
-int id radioGroup2 0x7f0a0050
+int id radio1 0x7f0a0051
+int id radio2 0x7f0a0052
+int id radio3 0x7f0a0054
+int id radio4 0x7f0a0055
+int id radio5 0x7f0a0056
+int id radioGroup1 0x7f0a0050
+int id radioGroup2 0x7f0a0053
 int id search_badge 0x7f0a0035
 int id search_bar 0x7f0a0034
 int id search_button 0x7f0a0036
@@ -430,7 +434,7 @@ int id sliding_tabs 0x7f0a004e
 int id split_action_bar 0x7f0a0004
 int id submit_area 0x7f0a003c
 int id tabMode 0x7f0a000c
-int id tableLayout 0x7f0a0053
+int id tableLayout 0x7f0a0057
 int id text 0x7f0a004d
 int id textView1 0x7f0a0047
 int id title 0x7f0a0027
@@ -509,6 +513,7 @@ int string screen_two 0x7f0b0017
 int string six_circles 0x7f0b001f
 int string stat1 0x7f0b001c
 int string stat2 0x7f0b001d
+int string ten_circles 0x7f0b0020
 int string text 0x7f0b0013
 int style Animation_AppCompat_DropDownUp 0x7f0c00cf
 int style AppBaseTheme 0x7f0c00f8

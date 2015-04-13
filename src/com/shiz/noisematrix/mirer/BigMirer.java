@@ -4,10 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.Random;
-import java.util.concurrent.ExecutionException;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -64,26 +61,27 @@ public class BigMirer extends Fragment implements OnClickListener {
 		mSaveButton = (Button) rootView.findViewById(R.id.button1);
 		mSaveButton.setOnClickListener(this);
 
-//		createMirer(mMirer);
+		createMirer(mMirer);
 		
-		MirerCreationTask mcTask = new MirerCreationTask();
-		mcTask.execute(mMirer);
-		try {
-			Boolean result = false;
-			result = mcTask.get();
-			if (result == true) {
-				Log.d(LOG_TAG, "result true");
-			} else {
-				Log.d(LOG_TAG, "result false");
-			}
-		} catch (InterruptedException e) {
-			Log.d(LOG_TAG, "InterruptedException");
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			Log.d(LOG_TAG, "ExecutionException");
-			e.printStackTrace();
-		}
+//		MirerCreationTask mcTask = new MirerCreationTask();
+//		mcTask.execute(mMirer);
+//		try {
+//			Boolean result = false;
+//			result = mcTask.get();
+//			if (result == true) {
+//				Log.d(LOG_TAG, "result true");
+//			} else {
+//				Log.d(LOG_TAG, "result false");
+//			}
+//		} catch (InterruptedException e) {
+//			Log.d(LOG_TAG, "InterruptedException");
+//			e.printStackTrace();
+//		} catch (ExecutionException e) {
+//			Log.d(LOG_TAG, "ExecutionException");
+//			e.printStackTrace();
+//		}
 		
+//		new MirerCreationThread().start();
 
 		return rootView;
 	}
@@ -136,24 +134,31 @@ public class BigMirer extends Fragment implements OnClickListener {
 		
 		draw10Circles(byteArray);
 		
-		mMirerBytes = new byte[mirerDimension * mirerDimension * 4];
+//		mMirerBytes = new byte[mirerDimension * mirerDimension * 4];
 		int index = 0;
-		for (int row = 0; row < mirerDimension; row++) {
-			for (int column = 0; column < mirerDimension; column++) {
-				mMirerBytes[index] = (byte) byteArray[row][column];
-				mMirerBytes[index + 1] = (byte) byteArray[row][column];
-				mMirerBytes[index + 2] = (byte) byteArray[row][column];
-				mMirerBytes[index + 3] = 0;
-				index += 4;
-			}
-		}
+//		for (int row = 0; row < mirerDimension; row++) {
+//			for (int column = 0; column < mirerDimension; column++) {
+//				mMirerBytes[index] = (byte) byteArray[row][column];
+//				mMirerBytes[index + 1] = (byte) byteArray[row][column];
+//				mMirerBytes[index + 2] = (byte) byteArray[row][column];
+//				mMirerBytes[index + 3] = 0;
+//				index += 4;
+//			}
+//		}
 
-		ByteBuffer buffer = ByteBuffer.allocate(mMirerBytes.length);
-		buffer.put(mMirerBytes);
-		buffer.rewind();
+//		ByteBuffer buffer = ByteBuffer.allocate(mMirerBytes.length);
+//		buffer.put(mMirerBytes);
+//		buffer.rewind();
 		Bitmap bitmap = Bitmap.createBitmap(mirerDimension, mirerDimension,
 				Bitmap.Config.ARGB_8888);
-		bitmap.copyPixelsFromBuffer(buffer);
+		for (int row = 0; row < mirerDimension; row++) {
+			for (int column = 0; column < mirerDimension; column++) {
+				int color = (byteArray[row][column] << 24) | (byteArray[row][column] << 16) 
+						| (byteArray[row][column] << 8) | (byteArray[row][column]);
+				bitmap.setPixel(column, row, color);
+			}
+		}
+//		bitmap.copyPixelsFromBuffer(buffer);
 		mirer.setImageBitmap(bitmap);
 
 		mMirerBytes = new byte[mirerDimension * mirerDimension];
@@ -180,7 +185,11 @@ public class BigMirer extends Fragment implements OnClickListener {
 			r = idx + 1;
 			center = circles.getCircleCenter10(idx + 1);
 			
-			for (int i = 0; i < 5; i ++) {
+//			Log.d(LOG_TAG, "ringWidth = " + ringWidth + ", r = " + r);
+//			Log.d(LOG_TAG, "center: " + center.x + " - " + center.y);
+			
+			for (int i = 0; i < 5; i++) {
+//				Log.d(LOG_TAG, "r: " + r + ", r + ringWidth: " + (r + ringWidth));
 				DrawUtils.drawRing(byteArray, center.x, center.y, r, r + ringWidth - 1, 0);
 				r += (ringWidth);
 				DrawUtils.drawRing(byteArray, center.x, center.y, r, r + ringWidth - 1, 1);
@@ -247,5 +256,15 @@ public class BigMirer extends Fragment implements OnClickListener {
 	      super.onPostExecute(result);
 	      Log.d(LOG_TAG, "End. Result = " + result);
 	    }
+	}
+	
+	class MirerCreationThread extends Thread {
+		public MirerCreationThread() {
+			
+		}
+		
+		public void run() {
+			createMirer(mMirer);
+		}
 	}
 }

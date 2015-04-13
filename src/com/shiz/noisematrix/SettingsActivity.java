@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 public class SettingsActivity extends PreferenceActivity 
 							  implements OnSharedPreferenceChangeListener {
@@ -19,7 +18,7 @@ public class SettingsActivity extends PreferenceActivity
 	public static final String FIELDS_SD = "fields_sd";
 	public static final String CIRCLES_COUNT = "circles_count";
 	
-	private final static String LOG_TAG = "settings";
+//	private final static String LOG_TAG = "settings";
 	
 	@SuppressWarnings("deprecation")
 	@Override
@@ -64,19 +63,19 @@ public class SettingsActivity extends PreferenceActivity
 		try {
 			correctValue = Integer.parseInt(value);
 		} catch (NumberFormatException e) {
-			Log.d(LOG_TAG, "e 0");
+//			Log.d(LOG_TAG, "e 0");
 			return 0;
 		}
 		
 		if (correctValue > 255) {
-			Log.d(LOG_TAG, "> 255");
+//			Log.d(LOG_TAG, "> 255");
 			return 255;
 		}
 		if (correctValue < 0) {
-			Log.d(LOG_TAG, "< 0");
+//			Log.d(LOG_TAG, "< 0");
 			return 0;
 		}
-		Log.d(LOG_TAG, "correct = " + correctValue);
+//		Log.d(LOG_TAG, "correct = " + correctValue);
 		return correctValue; 
 	}
 

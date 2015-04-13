@@ -2,14 +2,15 @@ package com.shiz.noisematrix.mirer;
 
 import java.util.Random;
 
-import com.shiz.noisematrix.SettingsActivity;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
+
+import com.shiz.noisematrix.SettingsActivity;
 
 public class DrawUtils {
-//	private final static String LOG_TAG = "DrawUtils";
+	private final static String LOG_TAG = "DrawUtils";
 
 	private static int mirerCrossEV;
 	private static int mirerCrossSD;
@@ -23,33 +24,34 @@ public class DrawUtils {
 
 	public static void drawRing(int[][] byteArray, int x, int y, int r1,
 			int r2, int color) {
+		// Mirer parameters.
+				mirerCrossEV = 180;
+				mirerCrossSD = 30;
+				mirerBackgroundEV = 90;
+				mirerBackgroundSD = 30;
+
+				SharedPreferences pref = PreferenceManager
+						.getDefaultSharedPreferences(mContext);
+
+				String keyValue = pref.getString(SettingsActivity.CROSS_EV, "");
+				mirerCrossEV = SettingsActivity.checkValue(keyValue);
+				keyValue = pref.getString(SettingsActivity.CROSS_SD, "");
+				mirerCrossSD = SettingsActivity.checkValue(keyValue);
+				keyValue = pref.getString(SettingsActivity.BACKGROUND_EV, "");
+				mirerBackgroundEV = SettingsActivity.checkValue(keyValue);
+				keyValue = pref.getString(SettingsActivity.BACKGROUND_SD, "");
+				mirerBackgroundSD = SettingsActivity.checkValue(keyValue);
+				keyValue = pref.getString(SettingsActivity.CIRCLES_COUNT, "");
+//		Log.d(LOG_TAG, "x = " + x + ", y = " + y);
 		circle_a(byteArray, x, y, r1, color);
 		circle_a(byteArray, x, y, r2, color);
+//		Log.d(LOG_TAG, "r1 = " + r1 + ", r2 = " + r2);
 
 		if (r1 < r2) {
 			int r = r2;
 			r2 = r1;
 			r1 = r;
 		}
-		
-		// Mirer parameters.
-		mirerCrossEV = 180;
-		mirerCrossSD = 30;
-		mirerBackgroundEV = 90;
-		mirerBackgroundSD = 30;
-
-		SharedPreferences pref = PreferenceManager
-				.getDefaultSharedPreferences(mContext);
-
-		String keyValue = pref.getString(SettingsActivity.CROSS_EV, "");
-		mirerCrossEV = SettingsActivity.checkValue(keyValue);
-		keyValue = pref.getString(SettingsActivity.CROSS_SD, "");
-		mirerCrossSD = SettingsActivity.checkValue(keyValue);
-		keyValue = pref.getString(SettingsActivity.BACKGROUND_EV, "");
-		mirerBackgroundEV = SettingsActivity.checkValue(keyValue);
-		keyValue = pref.getString(SettingsActivity.BACKGROUND_SD, "");
-		mirerBackgroundSD = SettingsActivity.checkValue(keyValue);
-		keyValue = pref.getString(SettingsActivity.CIRCLES_COUNT, "");
 
 		for (int i = x - r1; i < x + r1; i++) {
 			for (int j = y - r1; j < y + r1; j++) {
@@ -63,28 +65,47 @@ public class DrawUtils {
 
 	public static void drawPoint(int[][] byteArray, int x, int y, int color) {
 		if (x < 0 || y < 0) {
-//			Log.d(LOG_TAG, "x = " + x + " y = " + y);
+			Log.d(LOG_TAG, "< 0 x = " + x + " y = " + y);
 			return;
 		}
-		if (x > 255 || y > 255) {
-//			Log.d(LOG_TAG, "x = " + x + " y = " + y);
+		if (x > 3840 || y > 3840) {
+			Log.d(LOG_TAG, "> 3840 x = " + x + " y = " + y);
 			return;
 		}
+		
 		Random rand = new Random();
 		double nextRandValue;
 
 		nextRandValue = rand.nextGaussian() * mirerCrossSD + mirerCrossEV;
-		if (color == 0)
+		if (color == 0) {
 			byteArray[x][y] = (int) Math.round(nextRandValue);
-		nextRandValue = rand.nextGaussian() * mirerBackgroundSD
-				+ mirerBackgroundEV;
-		if (color == 1)
+			
+			if (byteArray[x][y] == 0) {
+				Log.d(LOG_TAG, "mirerCrossEV = " + mirerCrossEV);
+				Log.d(LOG_TAG, "mirerCrossSD = " + mirerCrossSD);
+				Log.d(LOG_TAG, "nextRandValue = " + nextRandValue);
+				Log.d(LOG_TAG, "0 x = " + x + " y = " + y);
+			}
+		}
+		
+		nextRandValue = rand.nextGaussian() * mirerBackgroundSD	+ mirerBackgroundEV;
+		if (color == 1) {
 			byteArray[x][y] = (int) Math.round(nextRandValue);
+			
+			if (byteArray[x][y] == 0) {
+				Log.d(LOG_TAG, "1 x = " + x + " y = " + y);
+			}
+		}
 
+//		if (byteArray[x][y] == 0) {
+//			Log.d(LOG_TAG, "x = " + x + " y = " + y);
+//		}
 		if (byteArray[x][y] < 0) {
+			Log.d(LOG_TAG, "x = " + x + " y = " + y);
 			byteArray[x][y] = 0;
 		}
 		if (byteArray[x][y] > 255) {
+			Log.d(LOG_TAG, "x = " + x + " y = " + y);
 			byteArray[x][y] = 255;
 		}
 	}

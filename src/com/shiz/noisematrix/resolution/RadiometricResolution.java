@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
+import android.graphics.Point;
 import android.util.Log;
 
 
@@ -19,7 +20,7 @@ public class RadiometricResolution {
 	 * @param byteArray Bytes of mirer
 	 * @return
 	 */
-	public static double radiometricResolutionForCircles(int[][] byteArray) {
+	public static double radiometricResolutionFor6Circles(int[][] byteArray) {
 		DescriptiveStatistics stats = new DescriptiveStatistics();
 		int ringWidth = 1;
 		int r = 1;
@@ -41,6 +42,47 @@ public class RadiometricResolution {
 //			calculateRing(byteArray, stats, 127, 95, r, r + ringWidth - 1, 1);
 			r += (ringWidth);
 		}
+		for (int i = 0; i < stats.getN(); i++) {
+			Log.d(LOG_TAG, "[" + i + "] = " + stats.getElement(i));
+		}
+		Log.d(LOG_TAG, "circle mean = " + stats.getMean());
+		
+		double radiometricResolution = (stats.getSum() / backgroundMean) / stats.getN();
+		Log.d(LOG_TAG, "rad = " + radiometricResolution);
+		
+		return radiometricResolution;
+	}
+	
+	public static double radiometricResolutionFor10Circles(int[][] byteArray) {
+		DescriptiveStatistics stats = new DescriptiveStatistics();
+		Circles circles = Circles.getInstance();
+		Point center = circles.getCircleCenter10(1);
+		int ringWidth = 1;
+		int r = 1;
+		
+		for (int i = 0; i < 5; i ++) {
+//			calculateRing(byteArray, stats, 127, 95, r, r + ringWidth - 1, 0);
+			r += (ringWidth);
+			CalcUtils.calculateRing(byteArray, stats, center.x, center.y, r, r + ringWidth - 1, 1);
+			r += (ringWidth);
+		}
+		double backgroundMean = stats.getMean();
+		Log.d(LOG_TAG, "background mean = " + backgroundMean);
+		
+		stats.clear();
+		r = 1;
+		ringWidth = 1;
+		for (int i = 0; i < 5; i ++) {
+			CalcUtils.calculateRing(byteArray, stats, center.x, center.y, r, r + ringWidth - 1, 0);
+			r += (ringWidth);
+//			calculateRing(byteArray, stats, 127, 95, r, r + ringWidth - 1, 1);
+			r += (ringWidth);
+		}
+		for (int i = 0; i < stats.getN(); i++) {
+			Log.d(LOG_TAG, "[" + i + "] = " + stats.getElement(i));
+		}
+		Log.d(LOG_TAG, "circle mean = " + stats.getMean());
+		
 		double radiometricResolution = (stats.getSum() / backgroundMean) / stats.getN();
 		Log.d(LOG_TAG, "rad = " + radiometricResolution);
 		
