@@ -2,6 +2,7 @@ package com.shiz.noisematrix.resolution;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
+import android.graphics.Point;
 import android.util.Log;
 
 /**
@@ -329,6 +330,79 @@ public class LinearResolution {
 		Log.d(LOG_TAG, "Kcp6/max = " + (Kcp[5] / max));
 		
 		for (int i = 0; i < 6; i++) {
+			Kcp[i] /= max;
+		}
+		
+		return Kcp;
+	}
+	
+	public static double[] linearResolutionFor10Circles(int[][] byteArray) {
+		DescriptiveStatistics stats = new DescriptiveStatistics();
+		Circles circles = Circles.getInstance();
+		Point center = circles.getCircleCenter10(10);
+		
+		int ringWidth = 10;
+		int r = 10;
+		for (int i = 0; i < 5; i ++) {
+			CalcUtils.calculateRing(byteArray, stats, center.x, center.y, r, r + ringWidth - 1, 0);
+			r += (ringWidth);
+//			calculateRing(byteArray, stats, 210, 210, r, r + ringWidth - 1, 1);
+			r += (ringWidth);
+			Log.d(LOG_TAG, "N = " + stats.getN());
+		}
+		double maxMirerMean = stats.getMean();
+		Log.d(LOG_TAG, "N = " + stats.getN());
+		Log.d(LOG_TAG, "maxMirerMean = " + maxMirerMean);
+		
+		stats.clear();
+		for (int i = 1800; i < 2800; i++) {
+			for (int j = 1800; j < 2800; j++) {
+				stats.addValue(byteArray[i][j]);
+			}
+		}
+		double backgroundMean = stats.getMean();
+		Log.d(LOG_TAG, "background mean: " + backgroundMean);
+		double max = maxMirerMean / backgroundMean;
+		Log.d(LOG_TAG, "max: " + max);
+		
+		ringWidth = 1;
+		r = 1;
+		double[] Kcp = new double[10];
+		double backgroundMeanI = 0;
+		for (int idx = 0; idx < 10; idx++) {
+			ringWidth = idx + 1;
+			r = idx + 1;
+			center = circles.getCircleCenter10(idx + 1);
+			
+//			Log.d(LOG_TAG, "ringWidth = " + ringWidth + ", r = " + r);
+//			Log.d(LOG_TAG, "center: " + center.x + " - " + center.y);
+			stats.clear();
+			for (int i = 0; i < 5; i++) {
+//				Log.d(LOG_TAG, "r: " + r + ", r + ringWidth: " + (r + ringWidth));
+//				CalcUtils.calculateRing(byteArray, stats, center.x, center.y, r, r + ringWidth - 1, 0);
+				r += (ringWidth);
+				CalcUtils.calculateRing(byteArray, stats, center.x, center.y, r, r + ringWidth - 1, 1);
+				r += (ringWidth);
+			}
+			backgroundMeanI = stats.getMean();
+			Log.d(LOG_TAG, "backgeroundmean[:" + idx + "] = " + backgroundMeanI);
+			
+			ringWidth = idx + 1;
+			r = idx + 1;
+			stats.clear();
+			for (int i = 0; i < 5; i++) {
+//				Log.d(LOG_TAG, "r: " + r + ", r + ringWidth: " + (r + ringWidth));
+				CalcUtils.calculateRing(byteArray, stats, center.x, center.y, r, r + ringWidth - 1, 0);
+				r += (ringWidth);
+//				CalcUtils.calculateRing(byteArray, stats, center.x, center.y, r, r + ringWidth - 1, 1);
+				r += (ringWidth);
+			}
+			Kcp[idx] = (stats.getSum() / backgroundMeanI) / stats.getN();
+			Log.d(LOG_TAG, "Kcp[" + idx + "] = " + Kcp[0]);
+			Log.d(LOG_TAG, "Kcp[" + idx + "]/max = " + (Kcp[0] / max));
+		}
+		
+		for (int i = 0; i < 10; i++) {
 			Kcp[i] /= max;
 		}
 		

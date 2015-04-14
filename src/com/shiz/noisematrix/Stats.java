@@ -48,7 +48,6 @@ public class Stats extends Fragment {
     private String mMirorFileName;
     private final int dimension = 256;
     private int stat = 0; // 1 - r4, 2 - r10, 3 - l4, 4 - l6, 5 - l5
-    private int radio = 0;
 
     public Stats(Context context) {
     	mContext = context;
@@ -191,7 +190,7 @@ public class Stats extends Fragment {
 			break;
 		case 5:
 			Log.d(LOG_TAG, "5 stat = " + stat);
-//			linearResolutionFor10Circles(byteArray);
+			linearResolutionFor10Circles(byteArray);
 			break;
 		default:
 			Log.d(LOG_TAG, "Switch stat default case.");
@@ -282,7 +281,7 @@ public class Stats extends Fragment {
 			break;
 		case 5:
 			Log.d(LOG_TAG, "raw 5 stat = " + stat);
-//			linearResolutionFor10Circles(statData);
+			linearResolutionFor10Circles(statData);
 			break;
 		default:
 			Log.d(LOG_TAG, "Switch stat default case.");
@@ -351,9 +350,31 @@ public class Stats extends Fragment {
 		}
 	}
 	
-	
-	
-	
+	private void linearResolutionFor10Circles(int[][] byteArray) {		
+		double[] Kcp = LinearResolution.linearResolutionFor10Circles(byteArray);
+		int VALUES_ROWS = 2;
+		int VALUES_COLUMNS = 5;
+		tableLayout.removeAllViews();
+
+		for (int i = 0; i < VALUES_ROWS; i++) {
+
+			TableRow tableRow = new TableRow(mContext);
+			TableRow.LayoutParams params = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, 
+					TableRow.LayoutParams.WRAP_CONTENT);
+			params.gravity = Gravity.CENTER_HORIZONTAL;
+			tableRow.setLayoutParams(params);
+			for (int j = 0; j < VALUES_COLUMNS; j++) {
+				TextView textView = new TextView(mContext);
+				textView.setText("m" + (i * VALUES_COLUMNS + j + 1) + "= " 
+						+ String.format("%1$,1.3f", Kcp[i * VALUES_COLUMNS  + j]));
+				textView.setPadding(10, 10, 10, 10);
+				tableRow.addView(textView, j);
+			}
+			
+			tableLayout.addView(tableRow, i);
+		}
+	}
+		
 	public static class ArrayListFragment extends ListFragment {
         int mNum;
 

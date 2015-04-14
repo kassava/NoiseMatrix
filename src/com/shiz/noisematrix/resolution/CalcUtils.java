@@ -61,7 +61,7 @@ public class CalcUtils {
 		if (x < 0 || y < 0) {
 			return;
 		}
-		if (x > 255 || y > 255) {
+		if (x > 3840 || y > 3840) {
 			return;
 		}
 		sts.addValue(byteArray[x][y]);
