@@ -6,8 +6,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import com.shiz.noisematrix.resolution.LinearResolution;
-import com.shiz.noisematrix.resolution.RadiometricResolution;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -33,6 +31,14 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.shiz.noisematrix.resolution.LinearResolution;
+import com.shiz.noisematrix.resolution.RadiometricResolution;
+
+/**
+ * Class calculates radiometric and linear resolutions for different mirers.
+ * @author ultra
+ *
+ */
 public class Stats extends Fragment {
 
     private SlidingTabLayout mSlidingTabLayout;
@@ -46,7 +52,7 @@ public class Stats extends Fragment {
     private final static String LOG_TAG = "stats";
     private Context mContext;
     private String mMirorFileName;
-    private final int dimension = 256;
+//    private final int dimension = 256;
     private int stat = 0; // 1 - r4, 2 - r10, 3 - l4, 4 - l6, 5 - l5
 
     public Stats(Context context) {
@@ -89,21 +95,21 @@ public class Stats extends Fragment {
 				switch (fileExtension) {
 				case "jpg":
 					Toast.makeText(mContext, "Chosen FileOpenDialog File: " + 
-							mMirorFileName, Toast.LENGTH_LONG).show();
+							mMirorFileName, Toast.LENGTH_SHORT).show();
 					openImageMirerFile(chosenDir);
 					break;
 				case "raw":
 					Toast.makeText(mContext, "Chosen FileOpenDialog File: " + 
-							mMirorFileName, Toast.LENGTH_LONG).show();
+							mMirorFileName, Toast.LENGTH_SHORT).show();
 					openRAWMirerFile(chosenDir);
 					break;
 				case "png":
 					Toast.makeText(mContext, "Chosen FileOpenDialog File: " + 
-							mMirorFileName, Toast.LENGTH_LONG).show();
+							mMirorFileName, Toast.LENGTH_SHORT).show();
 					openImageMirerFile(chosenDir);
 				default:
 					Toast.makeText(mContext, "Chosen FileOpenDialog File: " + 
-							mMirorFileName + " this not right!", Toast.LENGTH_LONG).show();
+							mMirorFileName + " this not right!", Toast.LENGTH_SHORT).show();
 					break;	
 				}
 			}
@@ -163,6 +169,12 @@ public class Stats extends Fragment {
 			rawBytes[idx] = originalByteArray[i];
 			i += 4;
 		}
+		
+		int fileSize = (int) imgFile.length();
+		
+		Log.d(LOG_TAG, "imgFile.length = " + fileSize);
+		
+		int dimension = (int) Math.sqrt(fileSize);
 		int[][] byteArray = new int[dimension][dimension];
 		int idx = 0;
 		for (i = 0; i < dimension; i++) {
@@ -198,10 +210,15 @@ public class Stats extends Fragment {
 		}
 	}
 	
+	/**
+	 * Read data from *.raw file with something features.
+	 * @param filePath
+	 */
 	private void openRAWMirerFile(String filePath) {
 		File mirerFile = new File(filePath);
 		
 		int fileSize = (int) mirerFile.length();
+		fileSize /= 3; // in Raw file data recorded three times
 
 	    byte[] mirerBytes = new byte[fileSize];
 	    try {
@@ -216,41 +233,41 @@ public class Stats extends Fragment {
 	        e.printStackTrace();
 	    }
 	    
-//	    byte[] bytes = new byte[(int) (fileSize * 4)];
-//	    int i = 0;
-//    	for (int index = 0; index < fileSize; index++) {	
-//    			bytes[i] = (byte) mirerBytes[index]; //(byte) 255;
-//    			bytes[i + 1] = (byte) mirerBytes[index];
-//    			bytes[i + 2] = (byte) mirerBytes[index];
-//    			bytes[i + 3] = 0; //(byte) mirerBytes[row][column];
-//    			i += 4;
-//    	}
-//    		
-//    	ByteBuffer buffer = ByteBuffer.allocate(bytes.length);
-//		buffer.put(bytes);
-//		buffer.rewind();
-//		Bitmap bitmap = Bitmap.createBitmap((int)Math.abs(Math.sqrt(mirerFile.length())), 
-//				(int)Math.abs(Math.sqrt(mirerFile.length())), Bitmap.Config.ARGB_8888);
-//		bitmap.copyPixelsFromBuffer(buffer);
-//		switch (stat) {
-//	    case 1:
-//	    	mirer1.setImageBitmap(bitmap);
-//	    	break;
-//	    case 2:
-//	    	mirer1.setImageBitmap(bitmap);
-//	    	break;
-//	    case 3:
-//	    	mirer2.setImageBitmap(bitmap);
-//	    	break;
-//	    case 4:
-//	    	mirer2.setImageBitmap(bitmap);
-//	    	break;
-//	    case 5:
-//	    	mirer2.setImageBitmap(bitmap);
-//	    default:
-//	    	Log.d(LOG_TAG, "openImageMirerFile default case");
-//	    	break;
-//	    }			
+	    byte[] bytes = new byte[(int) (fileSize * 4)];
+	    int i = 0;
+    	for (int index = 0; index < fileSize; index++) {	
+    			bytes[i] = (byte) mirerBytes[index];
+    			bytes[i + 1] = (byte) mirerBytes[index];
+    			bytes[i + 2] = (byte) mirerBytes[index];
+    			bytes[i + 3] = 0; 
+    			i += 4;
+    	}
+    		
+    	ByteBuffer buffer = ByteBuffer.allocate(bytes.length);
+		buffer.put(bytes);
+		buffer.rewind();
+		Bitmap bitmap = Bitmap.createBitmap((int)Math.abs(Math.sqrt(fileSize)), 
+				(int)Math.abs(Math.sqrt(fileSize)), Bitmap.Config.ARGB_8888);
+		bitmap.copyPixelsFromBuffer(buffer);
+		switch (stat) {
+	    case 1:
+	    	mirer1.setImageBitmap(bitmap);
+	    	break;
+	    case 2:
+	    	mirer1.setImageBitmap(bitmap);
+	    	break;
+	    case 3:
+	    	mirer2.setImageBitmap(bitmap);
+	    	break;
+	    case 4:
+	    	mirer2.setImageBitmap(bitmap);
+	    	break;
+	    case 5:
+	    	mirer2.setImageBitmap(bitmap);
+	    default:
+	    	Log.d(LOG_TAG, "openImageMirerFile default case");
+	    	break;
+	    }			
     	
     	int dimension = (int) Math.sqrt(fileSize);
     	int[][] statData = new int[dimension][dimension];
@@ -293,6 +310,9 @@ public class Stats extends Fragment {
 		double radiometricResolution = RadiometricResolution.radiometricResolutionFor6Circles(
 				byteArray);
 		textView.setText(String.format("%1$,1.3f", radiometricResolution));
+		
+		DataWriter.writeData(new File(mMirorFileName).getName(), String.format("%1$,1.3f", radiometricResolution),
+				String.format("%1$,1.3f", radiometricResolution));
 	}
 	
 	private void radiometricResolutionFor10Circles(int[][] byteArray) {		
@@ -325,7 +345,10 @@ public class Stats extends Fragment {
 		}
 	}
 	
-	private void linearResolutionFor6Circles(int[][] byteArray) {		
+	private void linearResolutionFor6Circles(int[][] byteArray) {	
+		
+		Log.d(LOG_TAG, "linearResolutionFor6Circles");
+		
 		double[] Kcp = LinearResolution.linearResolutionFor6Circles(byteArray);
 		int VALUES_ROWS = 2;
 		int VALUES_COLUMNS = 3;
@@ -348,6 +371,13 @@ public class Stats extends Fragment {
 			
 			tableLayout.addView(tableRow, i);
 		}
+		
+		String dataToFile = "";
+		for (int idx = 0; idx < Kcp.length; idx++) {
+			dataToFile += (String.format("%1$,1.3f", Kcp[idx]) + " ");
+		}
+		
+		DataWriter.writeData(new File(mMirorFileName).getName(), dataToFile, dataToFile);
 	}
 	
 	private void linearResolutionFor10Circles(int[][] byteArray) {		
@@ -470,7 +500,7 @@ public class Stats extends Fragment {
         		pageTitle = "stat 2";
         		break;
         	case 2:
-        		pageTitle = "Item " + (position + 1);
+        		pageTitle = "stat 3";
         		break;
         	default:
         		Log.d(LOG_TAG, "getPageTitle default case");
@@ -510,10 +540,7 @@ public class Stats extends Fragment {
                         container, false);
                 // Add the newly created View to the ViewPager
                 container.addView(view);
-
-                // Retrieve a TextView from the inflated View, and update it's text
-                TextView title = (TextView) view.findViewById(R.id.item_title);
-                title.setText(String.valueOf(position + 1));
+//                stat3(view);
             	break;
             default:
             	Log.d(LOG_TAG, "instantiateItem deafult break");
@@ -537,7 +564,6 @@ public class Stats extends Fragment {
 			mirer1.setOnClickListener(this);
 			radioGroup1 = (RadioGroup) view.findViewById(R.id.radioGroup1);
         	radioGroup1.setOnCheckedChangeListener(this);
-//        	radioGroup2.check(R.id.radio2);
         	radioGroup1.clearCheck();
 		}
         
@@ -547,49 +573,33 @@ public class Stats extends Fragment {
         	mirer2.setOnClickListener(this);
         	radioGroup2 = (RadioGroup) view.findViewById(R.id.radioGroup2);
         	radioGroup2.setOnCheckedChangeListener(this);
-//        	radioGroup2.check(R.id.radio2);
         	radioGroup2.clearCheck();
         }
+        
+//        private void stat3(View view) {
+//        	mirer3 = (ImageView) view.findViewById(R.id.imageView3);
+//        	textView = (TextView) view.findViewById(R.id.textView1);
+//        	tableLayout2 = (TableLayout) view.findViewById(R.id.tableLayout2);
+//        	mirer3.setOnClickListener(this);
+//        	radioGroup3 = (RadioGroup) view.findViewById(R.id.radioGroup3);
+//        	radioGroup3.setOnCheckedChangeListener(this);
+//        	radioGroup3.clearCheck();
+//        }
         
 		@Override
 		public void onClick(View v) {
 			switch (v.getId()) {
-			case R.id.imageView1:
-				Log.d(LOG_TAG, "imageView1");
-				
-//	        	stat = 0;
-//	        	switch (radio) {
-//	        	case 1:
-//	        		stat = 1;
-//	        		break;
-//	        	case 2:
-//	        		stat = 2;
-//	        		break;
-//	        	default:
-//	        		break;
-//	        	}
-			
+			case R.id.imageView1:			
 	        	Log.d(LOG_TAG, "imageView1 stat = " + stat);
 				openImage();
 				break;
-			case R.id.imageView2:
-				Log.d(LOG_TAG, "imageView2");
-//				stat = 0;
-
-//				switch (radio) {
-//	        	case 3:
-//	        		stat = 3;
-//	        		break;
-//	        	case 2:
-//	        		stat = 2;
-//	        		break;
-//	        	default:
-//	        		break;
-//	        	}
-	        	
+			case R.id.imageView2:	        	
 	        	Log.d(LOG_TAG, "imageView2 stat = " + stat);
 				openImage();
 				break;
+			case R.id.imageView3:
+				Log.d(LOG_TAG, "imageView3 stat = " + stat);
+//				open3RawFile();
 			default:
 				Log.d(LOG_TAG, "onClick default case");
 				break;

@@ -42,9 +42,9 @@ public class RadiometricResolution {
 //			calculateRing(byteArray, stats, 127, 95, r, r + ringWidth - 1, 1);
 			r += (ringWidth);
 		}
-		for (int i = 0; i < stats.getN(); i++) {
-			Log.d(LOG_TAG, "[" + i + "] = " + stats.getElement(i));
-		}
+//		for (int i = 0; i < stats.getN(); i++) {
+//			Log.d(LOG_TAG, "[" + i + "] = " + stats.getElement(i));
+//		}
 		Log.d(LOG_TAG, "circle mean = " + stats.getMean());
 		
 		double radiometricResolution = (stats.getSum() / backgroundMean) / stats.getN();

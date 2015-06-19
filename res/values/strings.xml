@@ -15,9 +15,10 @@
 	<string name="page">Page</string>
 	<string name="stat1">Здесь должна быть статистика</string>
 	<string name="stat2">0.0</string>
-	<string name="four_circles">4 circles</string>
-	<string name="six_circles">6 circles</string>
-	<string name="ten_circles">10 circles</string>
+	<string name="four_circles">4</string>
+	<string name="six_circles">6</string>
+	<string name="ten_circles">10</string>
+	<string name="j2k_six_circles">6j</string>
 
     <string-array name="screen_array">
         <item>Noise Matrix</item>
