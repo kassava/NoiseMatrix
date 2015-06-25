@@ -107,6 +107,7 @@ public class Stats extends Fragment {
 					Toast.makeText(mContext, "Chosen FileOpenDialog File: " + 
 							mMirorFileName, Toast.LENGTH_SHORT).show();
 					openImageMirerFile(chosenDir);
+					break;
 				default:
 					Toast.makeText(mContext, "Chosen FileOpenDialog File: " + 
 							mMirorFileName + " this not right!", Toast.LENGTH_SHORT).show();
@@ -264,6 +265,7 @@ public class Stats extends Fragment {
 	    	break;
 	    case 5:
 	    	mirer2.setImageBitmap(bitmap);
+	    	break;
 	    default:
 	    	Log.d(LOG_TAG, "openImageMirerFile default case");
 	    	break;
@@ -467,7 +469,7 @@ public class Stats extends Fragment {
     
 	// Adapter
     class SamplePagerAdapter extends PagerAdapter implements OnClickListener, OnCheckedChangeListener {
-    	int pagesCount = 3;
+    	int pagesCount = 2;
         /**
          * Return the number of pages to display
          */

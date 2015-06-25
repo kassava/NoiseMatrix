@@ -145,6 +145,8 @@ private void selectItem(int position) {
     case 4:
     	fragment = new Stats(this);
     	break;
+    case 5:
+    	fragment = new Stats2Files(this);
     default:
         break;
     }

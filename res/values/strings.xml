@@ -19,6 +19,7 @@
 	<string name="six_circles">6</string>
 	<string name="ten_circles">10</string>
 	<string name="j2k_six_circles">6j</string>
+	<string name="unknown">unknown</string>
 
     <string-array name="screen_array">
         <item>Noise Matrix</item>
@@ -26,5 +27,6 @@
         <item>Circle Mirer</item>
         <item>Big Mirer</item>
         <item>Stats</item>
+        <item>Stats 2 Files</item>
     </string-array>
 </resources>

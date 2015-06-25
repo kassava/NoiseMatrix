@@ -435,7 +435,7 @@ int id action_menu_presenter 0x7f0a0006
 int id action_mode_bar 0x7f0a003d
 int id action_mode_bar_stub 0x7f0a003c
 int id action_mode_close_button 0x7f0a0025
-int id action_settings 0x7f0a0074
+int id action_settings 0x7f0a007a
 int id activity_chooser_view_content 0x7f0a0026
 int id alertTitle 0x7f0a0030
 int id always 0x7f0a0019
@@ -471,6 +471,8 @@ int id image 0x7f0a0028
 int id imageView1 0x7f0a0053
 int id imageView2 0x7f0a0054
 int id imageView3 0x7f0a0055
+int id imageViewMaster 0x7f0a0076
+int id imageViewSlave 0x7f0a0077
 int id info 0x7f0a0068
 int id item_subtitle 0x7f0a0058
 int id item_title 0x7f0a0059
@@ -495,8 +497,10 @@ int id radio2 0x7f0a006e
 int id radio3 0x7f0a0070
 int id radio4 0x7f0a0071
 int id radio5 0x7f0a0072
+int id radio6C 0x7f0a0075
 int id radioGroup1 0x7f0a006c
 int id radioGroup2 0x7f0a006f
+int id radioGroup3 0x7f0a0074
 int id screen 0x7f0a0015
 int id scrollView 0x7f0a0032
 int id search_badge 0x7f0a0044
@@ -527,6 +531,8 @@ int id text 0x7f0a005d
 int id text2 0x7f0a0066
 int id textSpacerNoButtons 0x7f0a0033
 int id textView1 0x7f0a0057
+int id textView2 0x7f0a0078
+int id textView3 0x7f0a0079
 int id time 0x7f0a0064
 int id title 0x7f0a002c
 int id title_template 0x7f0a002f
@@ -584,13 +590,14 @@ int layout screen_circle_mirer 0x7f030027
 int layout screen_mirer 0x7f030028
 int layout screen_noisematrix 0x7f030029
 int layout screen_stat 0x7f03002a
-int layout select_dialog_item_material 0x7f03002b
-int layout select_dialog_multichoice_material 0x7f03002c
-int layout select_dialog_singlechoice_material 0x7f03002d
-int layout stat1 0x7f03002e
-int layout stat2 0x7f03002f
-int layout stat3 0x7f030030
-int layout support_simple_spinner_dropdown_item 0x7f030031
+int layout screen_stat2files 0x7f03002b
+int layout select_dialog_item_material 0x7f03002c
+int layout select_dialog_multichoice_material 0x7f03002d
+int layout select_dialog_singlechoice_material 0x7f03002e
+int layout stat1 0x7f03002f
+int layout stat2 0x7f030030
+int layout stat3 0x7f030031
+int layout support_simple_spinner_dropdown_item 0x7f030032
 int menu main 0x7f0e0000
 int string abc_action_bar_home_description 0x7f0b0001
 int string abc_action_bar_home_description_format 0x7f0b0005
@@ -628,6 +635,7 @@ int string stat2 0x7f0b001f
 int string status_bar_notification_info_overflow 0x7f0b0011
 int string ten_circles 0x7f0b0022
 int string text 0x7f0b0015
+int string unknown 0x7f0b0024
 int style AlertDialog_AppCompat 0x7f0c0040
 int style AlertDialog_AppCompat_Light 0x7f0c0041
 int style Animation_AppCompat_Dialog 0x7f0c0046
