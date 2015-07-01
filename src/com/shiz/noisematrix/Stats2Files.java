@@ -45,6 +45,7 @@ public class Stats2Files extends Fragment {
     private TextView textView;
     private TextView masterFilenameTextView;
     private TextView slaveFilenameTextView;
+    private TextView textViewR;
     private TableLayout tableLayout;
     private RadioGroup radioGroup1;
     private final static String LOG_TAG = "stats";
@@ -144,6 +145,14 @@ public class Stats2Files extends Fragment {
 		    	mirer2.setImageBitmap(mirerBitmap);
 		    	slaveFilenameTextView.setText(new File(mMirorFileName).getName());
 		    	break;
+		    case 3:
+		    	mirer1.setImageBitmap(mirerBitmap);
+		    	masterFilenameTextView.setText(new File(mMirorFileName).getName());
+		    	break;
+		    case 4:
+		    	mirer2.setImageBitmap(mirerBitmap);
+		    	slaveFilenameTextView.setText(new File(mMirorFileName).getName());
+		    	break;
 		    default:
 		    	Log.d(LOG_TAG, "openImageMirerFile default case");
 		    	break;
@@ -179,11 +188,19 @@ public class Stats2Files extends Fragment {
 		switch (stat) {
 		case 1:
 			Log.d(LOG_TAG, "1 stat = " + stat);
-			maxMirerToBackgeroundValue(byteArray);
+			maxMirerToBackgroundValue(byteArray);
 			break;
 		case 2:
 			Log.d(LOG_TAG, "2 stat = " + stat);
 			linearResolutionFor6Circles(byteArray, maxMirerToBackGroundValue);
+			break;
+		case 3:
+			Log.d(LOG_TAG, "3 stat = " + stat);
+			maxMirerToBackgroundValueR(byteArray);
+			break;
+		case 4:
+			Log.d(LOG_TAG, "4 stat = " + stat);
+			radiometricResolutionFor6Circles(byteArray, maxMirerToBackGroundValue);
 			break;
 		default:
 			Log.d(LOG_TAG, "Switch stat default case.");
@@ -239,8 +256,16 @@ public class Stats2Files extends Fragment {
 	    	mirer2.setImageBitmap(bitmap);
 	    	slaveFilenameTextView.setText(new File(mMirorFileName).getName());
 	    	break;
+	    case 3:
+	    	mirer1.setImageBitmap(bitmap);
+	    	masterFilenameTextView.setText(new File(mMirorFileName).getName());
+	    	break;
+	    case 4:
+	    	mirer2.setImageBitmap(bitmap);
+	    	slaveFilenameTextView.setText(new File(mMirorFileName).getName());
+	    	break;
 	    default:
-	    	Log.d(LOG_TAG, "openImageMirerFile default case");
+	    	Log.d(LOG_TAG, "openRawMirerFile default case");
 	    	break;
 	    }			
     	
@@ -257,11 +282,19 @@ public class Stats2Files extends Fragment {
     	switch (stat) {
 		case 1:
 			Log.d(LOG_TAG, "raw 1 stat = " + stat);
-			maxMirerToBackgeroundValue(statData);
+			maxMirerToBackgroundValue(statData);
 			break;
 		case 2:
 			Log.d(LOG_TAG, "raw 2 stat = " + stat);
 			linearResolutionFor6Circles(statData, maxMirerToBackGroundValue);
+			break;
+		case 3:
+			Log.d(LOG_TAG, "raw 3 stat = " + stat);
+			maxMirerToBackgroundValueR(statData);
+			break;
+		case 4:
+			Log.d(LOG_TAG, "raw 4 stat = " + stat);
+			radiometricResolutionFor6Circles(statData, maxMirerToBackGroundValue);
 			break;
 		default:
 			Log.d(LOG_TAG, "Switch stat default case.");
@@ -308,11 +341,24 @@ public class Stats2Files extends Fragment {
 		}
 	}
 	
-	private void maxMirerToBackgeroundValue(int[][] byteArray) {
+	private void maxMirerToBackgroundValue(int[][] byteArray) {
 		
 		Log.d(LOG_TAG, "maxMirerToBackgeroundValue");
 		
-		double max = LinearResolution.maxMirerToBackgroundValue(byteArray);
+		double max = LinearResolution.maxMirerToBackgroundValue2(byteArray);
+		textView.setText(String.format("%1$,1.3f", max));
+		
+		DataWriter.writeData(new File(mMirorFileName).getName(), "max = " + String.format("%1$,1.3f", max),
+				"max = " + String.format("%1$,1.3f", max));
+		
+		maxMirerToBackGroundValue = max;
+	}
+	
+	private void maxMirerToBackgroundValueR(int[][] byteArray) {
+		
+		Log.d(LOG_TAG, "maxMirerToBackgeroundValueR");
+		
+		double max = LinearResolution.maxMirerToBackgroundValue2(byteArray);
 		textView.setText(String.format("%1$,1.3f", max));
 		
 		DataWriter.writeData(new File(mMirorFileName).getName(), "max = " + String.format("%1$,1.3f", max),
@@ -360,7 +406,7 @@ public class Stats2Files extends Fragment {
 		
 		Log.d(LOG_TAG, "linearResolutionFor6Circles");
 		
-		double[] Kcp = LinearResolution.linearResolutionFor6Circles(byteArray, max);
+		double[] Kcp = LinearResolution.linearResolutionFor6Circles2(byteArray, max);
 		int VALUES_ROWS = 2;
 		int VALUES_COLUMNS = 3;
 		tableLayout.removeAllViews();
@@ -391,6 +437,18 @@ public class Stats2Files extends Fragment {
 		DataWriter.writeData(new File(mMirorFileName).getName(), dataToFile, dataToFile);
 	}
 	
+	private void radiometricResolutionFor6Circles(int[][] byteArray, double backgroundMean) {
+		
+		Log.d(LOG_TAG, "radiometricResolutionFor6Circles");
+		
+		double radiometricResolution = RadiometricResolution.radiometricResolutionFor6Circles(
+				byteArray, backgroundMean);
+		textViewR.setText(String.format("%1$,1.3f", radiometricResolution));
+		
+		DataWriter.writeData(new File(mMirorFileName).getName(), String.format("%1$,1.3f", radiometricResolution),
+				String.format("%1$,1.3f", radiometricResolution));
+	}
+	
 	private void linearResolutionFor10Circles(int[][] byteArray) {		
 		double[] Kcp = LinearResolution.linearResolutionFor10Circles(byteArray);
 		int VALUES_ROWS = 2;
@@ -418,7 +476,7 @@ public class Stats2Files extends Fragment {
     
 	// Adapter
     class SamplePagerAdapter extends PagerAdapter implements OnClickListener, OnCheckedChangeListener {
-    	int pagesCount = 1;
+    	int pagesCount = 2;
         /**
          * Return the number of pages to display
          */
@@ -478,6 +536,12 @@ public class Stats2Files extends Fragment {
             	container.addView(view);
             	stat3(view);
             	break;
+            case 1:
+            	Log.d(LOG_TAG, "stat4");
+            	view = getActivity().getLayoutInflater().inflate(R.layout.stat4,
+                        container, false);
+            	container.addView(view);
+            	stat4(view);
             default:
             	Log.d(LOG_TAG, "instantiateItem deafult break");
             	break;
@@ -508,6 +572,20 @@ public class Stats2Files extends Fragment {
         	radioGroup1.check(R.id.radio6C);
 		}
         
+        private void stat4(View view) {
+        	mirer1 = (ImageView) view.findViewById(R.id.imageViewMasterR);
+			mirer2 = (ImageView) view.findViewById(R.id.imageViewSlaveR);
+			textView = (TextView) view.findViewById(R.id.textView3R);
+			masterFilenameTextView = (TextView) view.findViewById(R.id.textView1R);
+			slaveFilenameTextView = (TextView) view.findViewById(R.id.textView2R);
+			textViewR = (TextView) view.findViewById(R.id.textView4R);
+			mirer1.setOnClickListener(this);
+			mirer2.setOnClickListener(this);
+			radioGroup1 = (RadioGroup) view.findViewById(R.id.radioGroupR);
+        	radioGroup1.setOnCheckedChangeListener(this);
+        	radioGroup1.check(R.id.radio6CR);
+        }
+        
 		@Override
 		public void onClick(View v) {
 			switch (v.getId()) {
@@ -519,6 +597,16 @@ public class Stats2Files extends Fragment {
 			case R.id.imageViewSlave:
 				stat = 2;
 	        	Log.d(LOG_TAG, "imageViewSlave stat = " + stat);
+				openImage();
+				break;
+			case R.id.imageViewMasterR:
+				stat = 3;
+				Log.d(LOG_TAG, "imageViewMasterL stat = " + stat);
+				openImage();
+				break;
+			case R.id.imageViewSlaveR:
+				stat = 4;
+				Log.d(LOG_TAG, "imageViewSlaveL stat = " + stat);
 				openImage();
 				break;
 			default:
@@ -533,6 +621,10 @@ public class Stats2Files extends Fragment {
 			case R.id.radio6C:
 				Log.d(LOG_TAG, "radio6C");
 				stat = 1;
+				break;
+			case R.id.radio6CR:
+				Log.d(LOG_TAG, "radio6CL");
+				stat = 3;
 				break;
 			default:
 				stat = 0;

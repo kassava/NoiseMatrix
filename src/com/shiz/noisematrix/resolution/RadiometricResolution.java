@@ -47,7 +47,8 @@ public class RadiometricResolution {
 //		}
 		Log.d(LOG_TAG, "circle mean = " + stats.getMean());
 		
-		double radiometricResolution = (stats.getSum() / backgroundMean) / stats.getN();
+//		double radiometricResolution = (stats.getSum() / backgroundMean) / stats.getN();
+		double radiometricResolution = stats.getMean() / backgroundMean;
 		Log.d(LOG_TAG, "rad = " + radiometricResolution);
 		
 		return radiometricResolution;
@@ -141,5 +142,45 @@ public class RadiometricResolution {
 		radiometricresolution /= rawMeans.size();
 		Log.d(LOG_TAG, "radiometricresolution = " + radiometricresolution);
 //		textView.setText(String.format("%1$,1.3f", radiometricresolution));
+	}
+	
+	public static double maxMirerToBackgroundValueR(int[][] byteArray) {
+		DescriptiveStatistics stats = new DescriptiveStatistics();
+		int ringWidth = 1;
+		int r = 1;
+		for (int i = 0; i < 5; i ++) {
+//			calculateRing(byteArray, stats, 127, 95, r, r + ringWidth - 1, 0);
+			r += (ringWidth);
+			CalcUtils.calculateRing(byteArray, stats, 127, 95, r, r + ringWidth - 1, 1);
+			r += (ringWidth);
+		}
+		double backgroundMean = stats.getMean();
+		Log.d(LOG_TAG, "background mean = " + backgroundMean);
+		
+		return backgroundMean; 
+	}
+	
+	public static double radiometricResolutionFor6Circles(int[][] byteArray, double backgroundMean) {
+		DescriptiveStatistics stats = new DescriptiveStatistics();
+		
+		stats.clear();
+		int r = 1;
+		int ringWidth = 1;
+		for (int i = 0; i < 5; i ++) {
+			CalcUtils.calculateRing(byteArray, stats, 127, 95, r, r + ringWidth - 1, 0);
+			r += (ringWidth);
+//			calculateRing(byteArray, stats, 127, 95, r, r + ringWidth - 1, 1);
+			r += (ringWidth);
+		}
+//		for (int i = 0; i < stats.getN(); i++) {
+//			Log.d(LOG_TAG, "[" + i + "] = " + stats.getElement(i));
+//		}
+		Log.d(LOG_TAG, "circle mean = " + stats.getMean());
+		
+//		double radiometricResolution = (stats.getSum() / backgroundMean) / stats.getN();
+		double radiometricResolution = stats.getMean() - backgroundMean;
+		Log.d(LOG_TAG, "rad = " + radiometricResolution);
+		
+		return radiometricResolution;
 	}
 }
